@@ -1,26 +1,28 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <PostList :posts="posts"/>
+    <PostList v-if="posts.length" :posts="posts"/>
+    <h3 v-else-if="error">Error loading data</h3>
+    <h3 v-else>Loading...</h3>
   </div>
 </template>
 
 <script>
 
 import PostList from '../components/PostList.vue';
-import { ref } from 'vue';
+import getPosts from '../composables/getPosts';
 
 export default {
   name: 'Home',
   components: { PostList },
   setup() {
+    const { posts, error, load } = getPosts();
 
-    const posts = ref([
-      { title: 'Welcome to the blog', body: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt, deleniti optio officiis consequatur obcaecati non perspiciatis corporis at dolores mollitia expedita ipsum cum cupiditate rerum tenetur voluptatibus saepe molestias totam neque dignissimos. Earum, aliquid fugit aperiam architecto animi fuga praesentium aspernatur quam, pariatur voluptatibus illo placeat labore necessitatibus enim numquam?', id: 1 },
-      { title: 'Top 5 CSS tips', body: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt, deleniti optio officiis consequatur obcaecati non perspiciatis corporis at dolores mollitia expedita ipsum cum cupiditate rerum tenetur voluptatibus saepe molestias totam neque dignissimos. Earum, aliquid fugit aperiam architecto animi fuga praesentium aspernatur quam, pariatur voluptatibus illo placeat labore necessitatibus enim numquam?', id: 2 }
-    ]);
+    load();
 
-    return { posts };
+    return { posts, error };
+
   },
+
 }
 </script>
